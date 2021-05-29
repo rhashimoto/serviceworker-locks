@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>serviceworker-locks demo</title>
+    <style>
+      iframe {
+        padding: 0.5em;
+        margin: 0.5em;
+        border-width: 1px;
+        border-style: solid;
+      }
+
+      .entry {
+        display: flex;
+        align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container"></div>
+    <button id="add">Add Context</button>
+    <template id="entry-template">
+      <div class="entry">
+        <iframe src="iframe.html" height="0"></iframe>
+        <button>&#215</button>
+      </div>
+    </template>
+    <script>
+      function addContext() {
+        const template = document.getElementById('entry-template');
+        const entry = template.content.cloneNode(true);
+        entry.querySelector('iframe').addEventListener('load', function(event) {
+          const iframe = event.target;
+          iframe.width = iframe.contentWindow.document.body.scrollWidth;
+          iframe.height = iframe.contentWindow.document.body.scrollHeight;
+        });
+        entry.querySelector('button').addEventListener('click', function(event) {
+          event.target.parentElement.remove();
+        });
+        document.getElementById('container').append(entry);
+      }
+      document.getElementById('add').addEventListener('click', addContext);
+
+      // Start with 2 iframes.
+      addContext();
+      addContext();
+    </script>
+  </body>
+</html>
