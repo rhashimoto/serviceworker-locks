@@ -1,3 +1,32 @@
+// Copyright 2021 Roy T. Hashimoto. All Rights Reserved.
+
+// This is a ServiceWorker that provides a locking service to clients
+// (Windows and/or Workers) in the same ServiceWorker scope. Clients
+// "call" the service using fetch with a special header containing
+// a JSON request object, e.g.:
+//
+// let hasLock = false;
+// while (!hasLock) {
+//   await fetch('./', {
+//     headers: {
+//       'X-Lock-Request': JSON.stringify({
+//         name: 'MyLock',
+//         type: 'shared', // 'shared', 'exclusive', or 'release'
+//         contextId: 'arbitrary unique identifier'
+//       })
+//     }
+//   }).then(() => {
+//     hasLock = true;
+//   }, async () => {
+//     // Workaround for browser navigation hang.
+//     await new Promise(resolve => setTimeout(resolve));
+//   });
+// }
+//
+// The while loop is necessary because the browser may stop a
+// ServiceWorker at any time, which rejects the fetch. Using a loop
+// as shown simply reissues the request if that happens.
+
 const LOCK_HEADER = 'X-Lock-Request';
 const UPDATE_INTERVAL = 5_000;
 
