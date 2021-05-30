@@ -10,7 +10,7 @@
         border-style: solid;
       }
 
-      .entry {
+      .context {
         display: flex;
         align-items: center;
       }
@@ -19,15 +19,15 @@
   <body>
     <div id="container"></div>
     <button id="add">Add Context</button>
-    <template id="entry-template">
-      <div class="entry">
-        <iframe src="iframe.html" height="0"></iframe>
+    <template id="context-template">
+      <div class="context">
+        <iframe src="iframe/iframe.html" height="0"></iframe>
         <button>&#215</button>
       </div>
     </template>
     <script>
       function addContext() {
-        const template = document.getElementById('entry-template');
+        const template = document.getElementById('context-template');
         const entry = template.content.cloneNode(true);
         entry.querySelector('iframe').addEventListener('load', function(event) {
           const iframe = event.target;

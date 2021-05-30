@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        display: flex;
+        margin: 0;
+        width: 4in;
+      }
+
+      div {
+        background-color: lightgreen;
+        margin-left: 2em;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="shared">Shared</button>
+    <button id="exclusive">Exclusive</button>
+    <button id="release">Release</button>
+    <div id="status"></div>
+    <script>
+      navigator.serviceWorker.register('./sw.js');
+
+      const contextId = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER).toString(36);
+      const state = {
+        type: '',
+        pending: false
+      };
+
+      function update() {
+        const status = document.getElementById('status');
+        status.textContent = state.type;
+        if (state.pending) {
+          status.style.backgroundColor = 'yellow';
+          for (const button of document.querySelectorAll('button')) {
+            button.disabled = true;
+          }
+        } else {
+          status.style.backgroundColor = 'lightgreen';
+          const locked = !!state.type;
+          for (const button of document.querySelectorAll('button')) {
+            if (button.id === 'release') {
+              button.disabled = !locked;
+            } else {
+              button.disabled = locked;
+            }
+          }
+        }
+      }
+      update();
+
+      document.getElementById('shared').addEventListener('click', async function() {
+        state.type = 'shared';
+        state.pending = true;
+        update();
+
+        const request = { contextId, name: 'foo', type: state.type };
+        while (state.pending) {
+          await fetch('./', {
+            headers: { 'X-Lock-Request': JSON.stringify(request) }
+          }).then(() => {
+            state.pending = false;
+          });
+        }
+        update();
+      });
+      document.getElementById('exclusive').addEventListener('click', async function() {
+        state.type = 'exclusive';
+        state.pending = true;
+        update();
+
+        const request = { contextId, name: 'foo', type: state.type };
+        while (state.pending) {
+          await fetch('./', {
+            headers: { 'X-Lock-Request': JSON.stringify(request) }
+          }).then(() => {
+            state.pending = false;
+          });
+        }
+        update();
+      });
+      document.getElementById('release').addEventListener('click', async function() {
+        state.type = '';
+        state.pending = true;
+        update();
+
+        const request = { contextId, name: 'foo', type: 'release' };
+        while (state.pending) {
+          await fetch('./', {
+            headers: { 'X-Lock-Request': JSON.stringify(request) }
+          }).then(() => {
+            state.pending = false;
+          });
+        }
+        update();
+      });
+    </script>
+  </body>
+</html>

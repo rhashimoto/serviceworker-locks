@@ -1,0 +1,8 @@
+{
+  "exclude": [".yarn", "dist", "debug"],
+  "compilerOptions": {
+    "checkJs": true,
+    "target":"es2020",
+    "moduleResolution": "node"
+  }
+}
