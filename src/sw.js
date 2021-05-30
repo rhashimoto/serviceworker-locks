@@ -146,7 +146,7 @@ console.debug(new Date().toLocaleTimeString(), 'service worker restart');
     if (lock.type === 'shared') {
       while (queue.length && queue[0].type === 'shared') {
         const request = queue.shift();
-        if (clientIds.has(request.name)) {
+        if (clientIds.has(request.clientId)) {
           console.debug(`${request.clientId} ${request.contextId} acquire ${name} ${request.type}`)
           lock.holders.add(this._makeKey(request.clientId, request.contextId));
         }
