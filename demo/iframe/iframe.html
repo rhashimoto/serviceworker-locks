@@ -61,7 +61,10 @@
             headers: { 'X-Lock-Request': JSON.stringify(request) }
           }).then(() => {
             state.pending = false;
-          }, () => console.debug('retrying', request));
+          }, async () => {
+            console.debug('retrying', request);
+            await new Promise(resolve => setTimeout(resolve));
+          });
         }
         update();
       });
@@ -76,7 +79,10 @@
             headers: { 'X-Lock-Request': JSON.stringify(request) }
           }).then(() => {
             state.pending = false;
-          }, () => console.debug('retrying', request));
+          }, async () => {
+            console.debug('retrying', request);
+            await new Promise(resolve => setTimeout(resolve));
+          });
         }
         update();
       });
