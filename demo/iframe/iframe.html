@@ -61,7 +61,7 @@
             headers: { 'X-Lock-Request': JSON.stringify(request) }
           }).then(() => {
             state.pending = false;
-          });
+          }, () => console.debug('retrying', request));
         }
         update();
       });
@@ -76,7 +76,7 @@
             headers: { 'X-Lock-Request': JSON.stringify(request) }
           }).then(() => {
             state.pending = false;
-          });
+          }, () => console.debug('retrying', request));
         }
         update();
       });
@@ -91,7 +91,7 @@
             headers: { 'X-Lock-Request': JSON.stringify(request) }
           }).then(() => {
             state.pending = false;
-          });
+          }, () => console.debug('retrying', request));
         }
         update();
       });
