@@ -57,7 +57,7 @@
 
         const request = { contextId, name: 'foo', type: state.type };
         while (state.pending) {
-          await fetch('./', {
+          await fetch('/', {
             headers: { 'X-Lock-Request': JSON.stringify(request) }
           }).then(() => {
             state.pending = false;
@@ -75,7 +75,7 @@
 
         const request = { contextId, name: 'foo', type: state.type };
         while (state.pending) {
-          await fetch('./', {
+          await fetch('/', {
             headers: { 'X-Lock-Request': JSON.stringify(request) }
           }).then(() => {
             state.pending = false;
