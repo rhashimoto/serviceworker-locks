@@ -222,12 +222,12 @@ console.debug(new Date().toLocaleTimeString(), 'service worker restart');
 
 const locks = new Locks();
 
-globalThis.addEventListener('install', function() {
-  globalThis.skipWaiting();
+globalThis.addEventListener('install', function(event) {
+  event.waitUntil(globalThis.skipWaiting());
 });
 
 globalThis.addEventListener('activate', function(event) {
-  event.waitUntil(clients.claim());
+  event.waitUntil(globalThis.clients.claim());
 });
 
 globalThis.addEventListener('fetch', function(event) {
